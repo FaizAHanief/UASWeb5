@@ -50,21 +50,25 @@
 
 <?php 
 	if(isset($_POST['simpan'])){
-		$user = $_POST['user'];
+		$uname = $_POST['user'];
 		$pwd = $_POST['pwd'];
 		$nama = $_POST['nama'];
 		$gen = $_POST['gen'];
 		$umur = $_POST['umur'];
 		$saldo = $_POST['saldo'];
-
-		require_once("config.php"); 
-
-		$result = mysqli_query($mysqli, "insert into data_user (Username, Password, Nama_Lengkap, Gender, Umur, Dompet) values ('$user', '$pwd', '$nama', '$gen', '$umur', '$saldo')");
-
+		require_once("konek_db.php"); 
+		$result = mysqli_query($id_mysql, "insert into data_users (Username, Password, NamaLeng, Gender, Umur, Dompet) values ('$uname', '$pwd', '$nama', '$gen', '$umur', '$saldo')");
 		if($result){
+			session_start();
 			echo "<b>Penambahan data berhasil!</b>";
+			$_SESSION['LoggedIn']=true;
+			$_SESSION['Status']=true;
+			$_SESSION['Username']=$uname;
+			header("location: index.php");
+			
 		} else {
 			echo "<b>Penambahan data gagal</b>";
+			header("location: login.php");
 		}
 	}
 ?>
