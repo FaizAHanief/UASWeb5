@@ -45,12 +45,11 @@
 	if(isset($_POST['login'])){
 		$uname = $_POST['uname'];
 		$pass = $_POST['pass'];
-
-		include_once("config.php");
-
+		include_once("konek_db.php");
+		$_SESSION["Log_In"]="";
 		//insert user data
-		$result = mysqli_query($mysqli, "select *from data_user where Username = '$uname' and Password = '$pass'");
-
+		//$query = "select *from data_users where username = '".mysqli_real_escape_string($id_mysql, $uname)."'and password = '".mysqli_real_escape_string($id_mysql,$pass)."'";
+		$result = mysqli_query($id_mysql, "select *from data_users where Username = '$uname' and Password = '$pass'");
 		if(@mysqli_num_rows($result)==1){
 			//direct ke nilai.php
 			session_start("Captcha");
@@ -58,30 +57,24 @@
 				echo "
 				<script>
 					alert('Input Captcha Salah');
-					location.href='index_login.php';
+					location.href='login.php';
 				</script>
 				";
 			}
 			else {
-				echo "
-					<form action=nilai.php method=post>
-						<input type=hidden name='uname' value=$username>
-						<input type=submit>
-					</form>
-				";
-				header("location: njay.php");
+				$_SESSION['LoggedIn']=true;
+				$_SESSION['Username']=$uname;
+				header("location: index.php");
 			}
-
 		} else {
 			echo "
 			<script>
 				alert('Username atau Password Anda salah');
-				location.href='index_login.php';
+				location.href='login.php';
 			</script>
 			";
 		}
 	}
-
 	?>
 	
 </body>
